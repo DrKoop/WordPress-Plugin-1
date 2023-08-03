@@ -1,0 +1,47 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Word Counter\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-03 01:26+0000\n"
+"PO-Revision-Date: 2023-08-03 01:28+0000\n"
+"Last-Translator: \n"
+"Language-Team: Español\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.4; wp-6.2.2\n"
+"X-Domain: wcpdomain"
+
+#. Description of the plugin
+msgid ""
+"Conteo de Palabras, número de caracteres, y el tiempo que llevaría leer una "
+"dentro de una Entrada de Blog."
+msgstr ""
+
+#. Author of the plugin
+msgid "Dr.Koop"
+msgstr ""
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://ww.drkoopdev.com"
+msgstr ""
+
+#: first-plugin.php:64
+msgid "This post has"
+msgstr ""
+
+#: first-plugin.php:158
+msgid "Word Count Plugin"
+msgstr ""
+
+#. Name of the plugin
+msgid "Word Counter"
+msgstr ""
+
+#: first-plugin.php:64
+msgid "words."
+msgstr ""

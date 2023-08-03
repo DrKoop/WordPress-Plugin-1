@@ -1,14 +1,15 @@
 <?php
 
 /**
- * Plugin Name: Primer Plugin Test
+ * Plugin Name: Word Counter
  * Plugin URI: https://ww.drkoopdev.com
- * Description: Un Primer Asombroso Plugin
+ * Description: Conteo de Palabras, número de caracteres, y el tiempo que llevaría leer una dentro de una Entrada de Blog.
  * Author: Dr.Koop
  * Version: 1.0
  * Author URI: https://ww.drkoopdev.com
  * License: GPL2+
- * Text Domain: drkoop,plugin
+ * Text Domain: wcpdomain
+ * Domain Path: /languages
  * Requires at least: 6.1
  * Requires PHP: 5.6
  *
@@ -20,7 +21,75 @@
     {
         add_action('admin_menu', array($this, 'andminPage') );
         add_action( 'admin_init', array($this, 'settings'));
+        //Esta sentencia, solo  EJECUTA cuando WORDPRESS lo requiera y cumpla sus condiciones
+        add_filter('the_content' , array($this, 'ifWrap'));
+        add_action('init', array($this,'translation') );
     }
+
+    function translation(){
+        load_plugin_textdomain('wcpdomain', false, dirname(plugin_basename(__FILE__)) . '/languages');
+    }
+
+    function ifWrap($content){
+        //Verifica si el contenido esta dentro de una ENTRADA DE BLOG y si esta en el main
+        //LOS 3 checkbox de ajustes las entradas sean true , es decir su valor por defecto en este caso es "1", marcados por el usuario
+        if( is_main_query() AND is_single()  AND 
+        (   get_option('wcp_wordcount', '1') OR 
+            get_option('wcp_character', '1') OR
+            get_option('wcp_read_time', '1') 
+        )){
+            //Esta sentencia, EJECUTA en el momento la funcion
+            return $this -> modifyBlogHTML($content);
+          }else{
+            return $content;
+          }
+
+    }
+
+
+    function modifyBlogHTML($content){
+
+        $html = '<h3>'. esc_html(get_option('wcp_headline', 'Post Statistics')) .'</h3><p>';
+
+        //Obtener el resultado de las estadisticas del POST
+        if( 
+            get_option('wcp_wordcount', '1') OR 
+            get_option('wcp_character', '1')
+         ){
+            //Cuenta el numero de palabras
+            $wordCount = str_word_count(strip_tags($content));
+        }
+
+        if(get_option('wcp_wordcount', '1')){
+            $html .= esc_html(__('This post has','wcpdomain')) . ' ' . $wordCount . ' ' . esc_html(__('words.','wcpdomain')) .'<br>';
+        }
+
+        if(get_option('wcp_character', '1')){
+            //Cuenta el numero de carcateres dentro de un parrafo
+            $numberOfCharacters = strlen(strip_tags($content));
+            
+
+            $html .= esc_html(__('This post has','wcpdomain')) . ' ' . $numberOfCharacters . ' ' . esc_html(__('characters.','wcpdomain')) .'<br>' ;
+        }
+
+        if(get_option('wcp_read_time', '1')){
+            
+            
+
+            $html .= esc_html(__('This post will take about','wcpdomain')) . ' ' . round($wordCount/225) . ' ' . esc_html(__('minute(s) to read.','wcpdomain')) .'<br>';
+        }
+
+        $html .= '</p>';
+        ///
+
+        //Imprime el html dependiendo dependiendo la preferencia del usuario
+        if( get_option('wcp_location', '0') == '0'){
+            return $html . $content;
+        }
+
+        return $content . $html;
+    }
+
 
     function settings(){
 
@@ -89,7 +158,7 @@
     <?php }
 
     function andminPage(){
-        add_options_page('Word Count Settings', 'Word Count Plugin', 'manage_options', 'word-count-settings', array($this, 'settingsHTML') );
+        add_options_page('Word Count Settings', __('Word Count Plugin', 'wcpdomain'), 'manage_options', 'word-count-settings', array($this, 'settingsHTML') );
      }
     
     
